@@ -156,3 +156,26 @@ export async function deleteRecipe(id: string) {
     return { message: 'Database Error: Failed to Delete Recipe.' };
   }
 }
+export async function createReview(formData: FormData) {
+  const recipeId = formData.get('recipeId') as string;
+  const author = formData.get('author') as string;
+  const comment = formData.get('comment') as string;
+  const rating = formData.get('rating') as string;
+
+  if (!recipeId || !author || !comment || !rating) {
+    return;
+  }
+
+  try {
+    await sql`
+      INSERT INTO "Review" (rating, comment, author, "recipeId", "createdAt")
+      VALUES (${Number(rating)}, ${comment}, ${author}, ${recipeId}, NOW())
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to create review.');
+  }
+
+  revalidatePath(`/recipes/${recipeId}`);
+  redirect(`/recipes/${recipeId}`);
+}

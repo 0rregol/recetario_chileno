@@ -82,6 +82,15 @@ export default async function Home({
                 </Link>
 
                 <div className="p-7 flex flex-col flex-grow">
+                  
+                  {recipe.authorName && (
+                    <div className="mb-2">
+                        <Link href={`/chef/${recipe.authorId}`} className="text-xs font-bold text-clay-red uppercase tracking-wider hover:underline">
+                        By {recipe.authorName}
+                        </Link>
+                    </div>
+                  )}
+
                   <Link href={`/recipes/${recipe.id}`} className="cursor-pointer block">
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-clay-red transition leading-tight font-serif">
                       {recipe.title}
