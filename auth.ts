@@ -9,13 +9,16 @@ async function getUser(email: string) {
   try {
     const user = await sql`SELECT * FROM "User" WHERE email = ${email} LIMIT 1`;
     return user[0];
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
 }
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
+   secret: process.env.AUTH_SECRET,
+  
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -37,4 +40,18 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string; 
+      }
+      return session;
+    },
+  },
 });
