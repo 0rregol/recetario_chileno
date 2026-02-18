@@ -14,10 +14,12 @@ async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
-
+if (!process.env.AUTH_SECRET) {
+  console.error("⚠️ ¡ALERTA! AUTH_SECRET no está cargando. Revisa Vercel.");
+}
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
-   secret: '6f9e8d7c5b4a3f2e1d0c9b8a7f6e5d4c',
+   secret:process.env.AUTH_SECRET,
   
   providers: [
     Credentials({
