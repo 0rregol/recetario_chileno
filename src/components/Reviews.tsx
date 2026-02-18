@@ -41,7 +41,7 @@ export default function Reviews({ recipeId, reviews }: { recipeId: string, revie
               </div>
               <p className="text-gray-600 text-sm leading-relaxed ml-10">{review.comment}</p>
               <p className="text-xs text-gray-400 mt-2 ml-10">
-                {new Date(review.createdAt).toLocaleDateString()}
+                {new Date(review.createdAt).toLocaleDateString('es-CL')}
               </p>
             </div>
           ))
